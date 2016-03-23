@@ -195,6 +195,12 @@ namespace tranquvis.Utils.WinFormDesign
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public Color FormControlHoverColor { get; set; }
 
+        /// <summary>
+        /// if a drop shadow should be painted to the window
+        /// </summary>
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        public bool WindowDropShadow { get; set; } = true;
+
 
         /// <summary>
         /// (necessary for initialising custom layout in VS Designer) Do not call this method outside Designer!
@@ -266,6 +272,21 @@ namespace tranquvis.Utils.WinFormDesign
         }
 
         #endregion
+        
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                if(!WindowDropShadow)
+                    return base.CreateParams;
+
+                //draw window shadow
+                const int CS_DROPSHADOW = 0x20000;
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
 
         #region window management
         protected override void OnPaint(PaintEventArgs e)
